@@ -48,21 +48,12 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-void Single_SEG7(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
-
 char seg7[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90};
 
 uint32_t* GPIOA_CRL = 0x40010800;
@@ -70,7 +61,12 @@ uint32_t* GPIOA_ODR = 0x4001080C;
 
 uint32_t* GPIOB_CRH = 0x40010C04;
 uint32_t* GPIOB_ODR = 0x40010C0C;
+/* USER CODE END 0 */
 
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -95,19 +91,18 @@ int main(void)
 
   /* Initialize all configured peripherals */
 // MX_GPIO_Init();
-
   /* USER CODE BEGIN 2 */
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  //*GPIOA_CRL = 0x33333333;
+  //*GPIOA_CRL = 0x33333333U;
   for(int i = 0; i < 9; i++){
-	  *GPIOA_CRL |= (0x03 << (i*4));
+	  *GPIOA_CRL |= (0x3 << (i*4));
   }
 
-  //*GPIOB_CRH = 0x33330000;
+  //*GPIOB_CRH = 0x33330000U;
   for(int i = 0; i < 4; i++){
-	  *GPIOB_CRH |= (0x03 << (16 + i*4));
+	  *GPIOB_CRH |= (0x3 << (16 + i*4));
   }
   /* USER CODE END 2 */
 
@@ -119,7 +114,11 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  Single_SEG7();
-	  All_SEG7_1234();
+
+	  for(int i = 0; i < 200; i++){
+		  All_SEG7_1234();
+		  i++;
+	  }
 
   }
   /* USER CODE END 3 */
@@ -223,7 +222,6 @@ void All_SEG7_1234(void){
 		*GPIOB_ODR = 0;
 	}
 }
-
 /* USER CODE END 4 */
 
 /**
